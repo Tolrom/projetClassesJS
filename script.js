@@ -203,7 +203,9 @@ function healPlayer() {
  * @function
  * @returns {void} Ne retourne aucune valeur.
  */
-function surrenderGame() {}
+function surrenderGame() {
+
+}
 
 // Special attack availability
 /**
