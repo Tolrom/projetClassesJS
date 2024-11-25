@@ -81,12 +81,18 @@ function resetGame() {}
  * @returns {void} Ne retourne aucune valeur.
  */
 function attackMonster() {
-    let degat = Math.ceil(Math.random() * 9);
-    monsterHealth -= degat;
-    logMessagesList = `Le monstre a reçu : ${degat} points de dégats.`;
-    monsterHealthBar.style.width = `${monsterHealth}%`;
-    console.log(monsterHealth);
-    attackPlayer();
+    if (monsterHealth > 0 && playerHealth > 0) {
+        let degat = Math.ceil(Math.random() * 9);
+        monsterHealth -= degat;
+        logMessagesList.innerText = `Le monstre a reçu : ${degat} points de dégats.`;
+        console.log(logMessagesList);
+        if (monsterHealth < 0) {
+            monsterHealthBar.style.width = 0 + "%";
+        }
+        monsterHealthBar.style.width = `${monsterHealth}%`;
+        console.log(monsterHealth);
+        attackPlayer();
+    }
 }
 
 /**
@@ -100,11 +106,19 @@ function attackMonster() {
  * @returns {void} Ne retourne aucune valeur.
  */
 function attackPlayer() {
-    let degat = Math.round(Math.random() * 5) + 10;
-    playerHealth -= degat;
-    logMessagesList.innerHTML = `Vous avez reçu : ${degat} points de dégats.`;
-    playerHealthBar.style.width = `${playerHealth}%`;
-    console.log(playerHealth);
+    if (playerHealth > 0 && monsterHealth > 0) {
+        let degat = Math.round(Math.random() * 5) + 10;
+        playerHealth -= degat;
+        logMessagesList = `Vous avez reçu : ${degat} points de dégats.`;
+        console.log(logMessagesList);
+        if (playerHealth < 0) {
+            playerHealthBar.style.width = 0 + "%";
+        }
+        playerHealthBar.style.width = `${playerHealth}%`;
+        console.log(playerHealth);
+    } else {
+        return;
+    }
 }
 
 /**
@@ -133,7 +147,14 @@ function specialAttackMonster() {}
  * @function
  * @returns {void} Ne retourne aucune valeur.
  */
-function healPlayer() {}
+function healPlayer() {
+    currentRound++;
+    let soin = Math.floor(Math.random() * 101);
+    playerHealth += soin;
+    playerHealthBar.style.width = `${playerHealth}%`;
+    attackPlayer();
+    checkWinner();
+}
 
 /**
  * Permet au joueur d'abandonner la partie.
