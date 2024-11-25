@@ -14,6 +14,7 @@ let playerHealth = 100;
 let monsterHealth = 100;
 let currentRound = 0;
 let logMessages = [];
+let spAtt = 0;
 
 // Utility functions
 /**
@@ -41,7 +42,10 @@ function updateHealthBars() {
  * @returns {void} Ne retourne aucune valeur.
  */
 function addLogMessage(who, action, value) {
-    logMessages += `${who} ${action} pour ${value} HP`
+    logMessages += `${who} ${action} pour ${value} HP`;
+    let log = document.createElement('li');
+    log.textContent = `${who} ${action} pour ${value} HP`;
+    logMessagesList.prepend(log);
 }
 
 /**
@@ -58,7 +62,15 @@ function addLogMessage(who, action, value) {
  * @returns {void} Ne retourne aucune valeur. Modifie l'interface utilisateur en fonction du résultat du jeu.
  */
 function checkWinner() {
-
+    if(playerHealth < 0 && monsterHealth > 0){
+        winnerMessage.textContent = "L'ennemi a gagné";
+    }
+    else if(playerHealth > 0 && monsterHealth < 0){
+        winnerMessage.textContent = "Le joueur a gagné";
+    }
+    else if(playerHealth < 0 && monsterHealth < 0){
+        winnerMessage.textContent = "Y'a match nul";
+    }
 }
 
 /**
@@ -103,7 +115,7 @@ function attackMonster() {
  * @returns {void} Ne retourne aucune valeur.
  */
 function attackPlayer() {
-
+    
 }
 
 /**
@@ -119,7 +131,16 @@ function attackPlayer() {
  * @returns {void} Ne retourne aucune valeur.
  */
 function specialAttackMonster() {
-
+    currentRound ++;
+    let log = document.createElement('li');
+    log.textContent = "Le joueur utilise son attaque spéciaaaaale";
+    logMessagesList.prepend(log);
+    let damage = Math.floor(Math.random()*15) + 10;
+    monsterHealth -= damage;
+    attackMonster();
+    checkWinner();
+    spAtt = currentRound;
+    updateSpecialAttackButton();
 }
 
 /**
@@ -160,7 +181,13 @@ function surrenderGame() {
  * @returns {void} Ne retourne aucune valeur.
  */
 function updateSpecialAttackButton() {
-
+if( currentRound - spAtt >= 3 ){
+    specialAttackButton.disabled = false;
+}
+else{
+    specialAttackButton.disabled = true;
+}
+spAtt++;
 }
 
 // Event Listeners
