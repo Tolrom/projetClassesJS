@@ -26,7 +26,7 @@ let logMessages = [];
  * @returns {void} Ne retourne aucune valeur.
  */
 function updateHealthBars() {
-
+    
 }
 
 /**
