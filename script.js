@@ -148,12 +148,21 @@ function specialAttackMonster() {}
  * @returns {void} Ne retourne aucune valeur.
  */
 function healPlayer() {
-    currentRound++;
-    let soin = Math.floor(Math.random() * 101);
-    playerHealth += soin;
-    playerHealthBar.style.width = `${playerHealth}%`;
-    attackPlayer();
-    checkWinner();
+    if (playerHealth === 100) {
+        logMessagesList = `full health`;
+        console.log(logMessagesList);
+    } else if (playerHealth > 0) {
+        currentRound++;
+        let soin = Math.floor(Math.random() * (20 - 8) + 8);
+        playerHealth = Math.min(playerHealth + soin, 100);
+        playerHealthBar.style.width = `${playerHealth}%`;
+        logMessagesList = `Vous avez reçu : ${soin} points de santé.`;
+        console.log(logMessagesList);
+        attackPlayer();
+        checkWinner();
+    } else {
+        return;
+    }
 }
 
 /**
