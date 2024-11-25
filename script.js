@@ -26,7 +26,10 @@ let spAtt = 0;
  * @global
  * @returns {void} Ne retourne aucune valeur.
  */
-function updateHealthBars() {}
+function updateHealthBars() {
+    monsterHealthBar.style.width = monsterHealth + "%" ;
+    playerHealthBar.style.width = playerHealth + "%" ;
+}
 
 /**
  * Ajoute un message de log à l'historique de la bataille.
@@ -91,13 +94,10 @@ function resetGame() {
     logMessages = [];
 
     //Met à jour les barres de santé et masque la section de fin de jeu.
-    playerHealthBar.style.width = playerHealth + "%";
-    monsterHealthBar.style.width = monsterHealth + "%";
+    updateHealthBars();
 
-    //Désactive le bouton d'attaque spéciale.
+    //Désactive le bouton d'attaque spéciale
     specialAttackButton.style.disable = true;
-
-
 }
 
 // Actions
