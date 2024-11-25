@@ -165,7 +165,8 @@ function healPlayer() {
 function surrenderGame() {
     playerHealth = 0;
     updateHealthBars();
-    
+    alert("t'as abandonné gros naz");
+    checkWinner();
 }
 
 // Special attack availability
