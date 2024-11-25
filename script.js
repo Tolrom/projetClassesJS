@@ -41,7 +41,7 @@ function updateHealthBars() {
  * @returns {void} Ne retourne aucune valeur.
  */
 function addLogMessage(who, action, value) {
-
+    logMessages += `${who} ${action} pour ${value} HP`
 }
 
 /**
