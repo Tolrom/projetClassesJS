@@ -14,6 +14,7 @@ let playerHealth = 100;
 let monsterHealth = 100;
 let currentRound = 0;
 let logMessages = [];
+let spAtt = 0;
 
 // Utility functions
 /**
@@ -25,7 +26,10 @@ let logMessages = [];
  * @global
  * @returns {void} Ne retourne aucune valeur.
  */
-function updateHealthBars() {}
+function updateHealthBars() {
+    monsterHealthBar.style.width = monsterHealth + "%" ;
+    playerHealthBar.style.width = playerHealth + "%" ;
+}
 
 /**
  * Ajoute un message de log à l'historique de la bataille.
@@ -38,7 +42,12 @@ function updateHealthBars() {}
  * @param {number} value - La valeur associée à l'action (dégâts ou points de soin).
  * @returns {void} Ne retourne aucune valeur.
  */
-function addLogMessage(who, action, value) {}
+function addLogMessage(who, action, value) {
+    logMessages += `${who} ${action} pour ${value} HP`;
+    let log = document.createElement('li');
+    log.textContent = `${who} ${action} pour ${value} HP`;
+    logMessagesList.prepend(log);
+}
 
 /**
  * Vérifie l'état de santé du joueur et du monstre pour déterminer le gagnant de la partie.
@@ -53,7 +62,17 @@ function addLogMessage(who, action, value) {}
  * @function
  * @returns {void} Ne retourne aucune valeur. Modifie l'interface utilisateur en fonction du résultat du jeu.
  */
-function checkWinner() {}
+function checkWinner() {
+    if(playerHealth < 0 && monsterHealth > 0){
+        winnerMessage.textContent = "L'ennemi a gagné";
+    }
+    else if(playerHealth > 0 && monsterHealth < 0){
+        winnerMessage.textContent = "Le joueur a gagné";
+    }
+    else if(playerHealth < 0 && monsterHealth < 0){
+        winnerMessage.textContent = "Y'a match nul";
+    }
+}
 
 /**
  * Réinitialise les données et l'interface du jeu pour commencer une nouvelle partie.
@@ -65,7 +84,21 @@ function checkWinner() {}
  * @function
  * @returns {void} Ne retourne aucune valeur.
  */
-function resetGame() {}
+function resetGame() {
+    //Restaure les points de vie des deux combattants à leur valeur initiale.
+    playerHealth = 100;
+    monsterHealth = 100;
+
+    //Réinitialise le nombre de rounds et vide les messages de log.
+    currentRound = 0;
+    logMessages = [];
+
+    //Met à jour les barres de santé et masque la section de fin de jeu.
+    updateHealthBars();
+
+    //Désactive le bouton d'attaque spéciale
+    specialAttackButton.style.disable = true;
+}
 
 // Actions
 /**
@@ -133,7 +166,18 @@ function attackPlayer() {
  * @function
  * @returns {void} Ne retourne aucune valeur.
  */
-function specialAttackMonster() {}
+function specialAttackMonster() {
+    currentRound ++;
+    let log = document.createElement('li');
+    log.textContent = "Le joueur utilise son attaque spéciaaaaale";
+    logMessagesList.prepend(log);
+    let damage = Math.floor(Math.random()*15) + 10;
+    monsterHealth -= damage;
+    attackMonster();
+    checkWinner();
+    spAtt = currentRound;
+    updateSpecialAttackButton();
+}
 
 /**
  * Permet au joueur de se soigner.
@@ -184,7 +228,15 @@ function surrenderGame() {}
  * @function
  * @returns {void} Ne retourne aucune valeur.
  */
-function updateSpecialAttackButton() {}
+function updateSpecialAttackButton() {
+if( currentRound - spAtt >= 3 ){
+    specialAttackButton.disabled = false;
+}
+else{
+    specialAttackButton.disabled = true;
+}
+spAtt++;
+}
 
 // Event Listeners
 attackButton.addEventListener("click", attackMonster);
