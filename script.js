@@ -26,7 +26,8 @@ let logMessages = [];
  * @returns {void} Ne retourne aucune valeur.
  */
 function updateHealthBars() {
-    
+    monsterHealthBar.style.width = monsterHealth + "%" ;
+    playerHealthBar.style.width = playerHealth + "%" ;
 }
 
 /**
@@ -72,7 +73,11 @@ function checkWinner() {
  * @returns {void} Ne retourne aucune valeur.
  */
 function resetGame() {
-
+    playerHealth = 100;
+    monsterHealth = 100;
+    updateHealthBars();
+    currentRound = 0;
+    logMessages = [];
 }
 
 // Actions
