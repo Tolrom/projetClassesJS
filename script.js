@@ -1,7 +1,7 @@
 // DOM Elements
 const playerHealthBar = document.getElementById("player-health");
 const monsterHealthBar = document.getElementById("monster-health");
-let logMessagesList = document.getElementById("log-messages");
+const logMessagesList = document.getElementById("log-messages");
 const gameOverSection = document.getElementById("game-over");
 const winnerMessage = document.getElementById("winner-message");
 const restartButton = document.getElementById("restart-button");
@@ -9,6 +9,7 @@ const attackButton = document.getElementById("attack-button");
 const specialAttackButton = document.getElementById("special-attack-button");
 const healButton = document.getElementById("heal-button");
 const surrenderButton = document.getElementById("surrender-button");
+const controls = document.getElementById('controls');
 
 let playerHealth = 100;
 let monsterHealth = 100;
@@ -64,13 +65,19 @@ function addLogMessage(who, action, value) {
  */
 function checkWinner() {
     if(playerHealth < 0 && monsterHealth > 0){
-        winnerMessage.textContent = "L'ennemi a gagné";
+        controls.style.display = 'none';
+        gameOverSection.style.display = 'block';
+        winnerMessage.innerText = "L'ennemi a gagné";
     }
     else if(playerHealth > 0 && monsterHealth < 0){
-        winnerMessage.textContent = "Le joueur a gagné";
+        controls.style.display = 'none';
+        gameOverSection.style.display = 'block';
+        winnerMessage.innerText = "Le joueur a gagné";
     }
     else if(playerHealth < 0 && monsterHealth < 0){
-        winnerMessage.textContent = "Y'a match nul";
+        controls.style.display = 'none';
+        gameOverSection.style.display = 'block';
+        winnerMessage.innerText = "Y'a match nul";
     }
 }
 
@@ -91,7 +98,10 @@ function resetGame() {
 
     //Réinitialise le nombre de rounds et vide les messages de log.
     currentRound = 0;
-    logMessages = [];
+    logMessages.innerHTML = '';
+    
+    controls.style.display = 'flex';
+    gameOverSection.style.display = 'none';
 
     //Met à jour les barres de santé et masque la section de fin de jeu.
     updateHealthBars();
@@ -116,10 +126,11 @@ function resetGame() {
 function attackMonster() {
     let degat = Math.ceil(Math.random() * 9);
     monsterHealth -= degat;
-    logMessagesList = `Le monstre a reçu : ${degat} points de dégats.`;
+    addLogMessage('Monstre', 'attaque', degat);
     monsterHealthBar.style.width = `${monsterHealth}%`;
     console.log(monsterHealth);
     attackPlayer();
+    checkWinner();
 }
 
 /**
@@ -135,9 +146,11 @@ function attackMonster() {
 function attackPlayer() {
     let degat = Math.round(Math.random() * 5) + 10;
     playerHealth -= degat;
-    logMessagesList.innerHTML = `Vous avez reçu : ${degat} points de dégats.`;
+    addLogMessage('Joueur', 'attaque', degat);
     playerHealthBar.style.width = `${playerHealth}%`;
     console.log(playerHealth);
+    updateSpecialAttackButton();
+    checkWinner();
 }
 
 /**
@@ -161,7 +174,7 @@ function specialAttackMonster() {
     monsterHealth -= damage;
     attackMonster();
     checkWinner();
-    spAtt = currentRound;
+    spAtt = -3;
     updateSpecialAttackButton();
 }
 
@@ -177,7 +190,10 @@ function specialAttackMonster() {
  * @function
  * @returns {void} Ne retourne aucune valeur.
  */
-function healPlayer() {}
+function healPlayer() {
+    
+    updateSpecialAttackButton();
+}
 
 /**
  * Permet au joueur d'abandonner la partie.
@@ -199,7 +215,7 @@ function surrenderGame() {}
  * @returns {void} Ne retourne aucune valeur.
  */
 function updateSpecialAttackButton() {
-if( currentRound - spAtt >= 3 ){
+if( spAtt >= 0 ){
     specialAttackButton.disabled = false;
 }
 else{
