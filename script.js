@@ -26,7 +26,8 @@ let logMessages = [];
  * @returns {void} Ne retourne aucune valeur.
  */
 function updateHealthBars() {
-
+    monsterHealthBar.style.width = monsterHealth + "%" ;
+    playerHealthBar.style.width = playerHealth + "%" ;
 }
 
 /**
@@ -72,7 +73,19 @@ function checkWinner() {
  * @returns {void} Ne retourne aucune valeur.
  */
 function resetGame() {
+    //Restaure les points de vie des deux combattants à leur valeur initiale.
+    playerHealth = 100;
+    monsterHealth = 100;
 
+    //Réinitialise le nombre de rounds et vide les messages de log.
+    currentRound = 0;
+    logMessages = [];
+
+    //Met à jour les barres de santé et masque la section de fin de jeu.
+    updateHealthBars();
+
+    //Désactive le bouton d'attaque spéciale
+    specialAttackButton.style.disable = true;
 }
 
 // Actions
